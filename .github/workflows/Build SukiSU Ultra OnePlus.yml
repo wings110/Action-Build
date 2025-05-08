@@ -162,6 +162,22 @@ jobs:
           rm kernel_platform/common/android/abi_gki_protected_exports_* || echo "No protected exports!"
           rm kernel_platform/msm-kernel/android/abi_gki_protected_exports_* || echo "No protected exports!"
 
+      # LXC-DOCKER-PATCHES
+      - name: Settings LXC-DOCKER-PATCHES
+        run: |
+          cd kernel_workspace
+          git clone https://github.com/wings110/ace3pro-patches.git
+          cd kernel_platform
+          cp ../ace3pro-patches/* ./
+          echo "正在打LXC-DOCKER应用补丁"
+          patch -p1 -F 3 < version-ignore.patch
+          patch -p1 -F 3 < overlayfs.patch
+          patch -p1 -F 3 < modules.bzl.patch
+          patch -p1 -F 3 < defconfig.patch
+          patch -p1 -F 3 < cgroup-prefix.patch
+          git add -A
+          git commit -m "Settings LXC-DOCKER-PATCHES"
+
       # 删除 -dirty 后缀
       - name: Force remove -dirty suffix
         run: |
